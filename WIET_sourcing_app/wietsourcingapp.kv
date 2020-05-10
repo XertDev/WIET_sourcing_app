@@ -1,0 +1,15 @@
+#:import utils kivy.utils
+
+#:include WIET_sourcing_app/kv/login_screen.kv
+#:include WIET_sourcing_app/kv/signup_screen.kv
+GridLayout:
+    cols: 1
+    FloatLayout:
+        ScreenManager:
+            id: screen_manager
+            LoginScreen:
+                name: "login_screen"
+                id: login_screen
+            SignupScreen:
+                name: "signup_screen"
+                id: signup_screen
