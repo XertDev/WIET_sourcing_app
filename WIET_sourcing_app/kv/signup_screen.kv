@@ -12,11 +12,17 @@
                     text: "WIET Sourcing"
                     halign: "center"
                 MDTextField:
+                    id: name
                     hint_text: "Name"
+                    write_tab: False
                 MDTextField:
+                    id: email
                     hint_text: "Email"
+                    write_tab: False
                 MDTextField:
+                    id: password
                     hint_text: "Password"
+                    write_tab: False
                 Widget:
                 MDBoxLayout:
                     orientation: "horizontal"
@@ -25,7 +31,8 @@
                         MDRectangleFlatButton:
                             pos_hint: {"left": 1, "bottom": 1}
                             text: "Sign up!"
+                            on_release: root.sign_up()
                         MDRectangleFlatButton:
                             pos_hint: {"right": 1}
                             text: "Back"
-                            on_press: root.move_to_login()
+                            on_release: root.move_to_login()

@@ -12,8 +12,8 @@ from WIET_sourcing_app.pages.login_screen import LoginScreen
 from WIET_sourcing_app.pages.signup_screen import SignupScreen
 from WIET_sourcing_app.services.auth_service import AuthService
 
-sys.path.append("/".join(x for x in __file__.split("/")[:-1]))
 
+sys.path.append("/".join(x for x in __file__.split("/")[:-1]))
 kivy.require('1.0.7')
 
 Config.set('graphics', 'fullscreen', '0')
