@@ -12,8 +12,10 @@
                     text: "WIET Sourcing"
                     halign: "center"
                 MDTextField:
+                    id: email
                     hint_text: "Email"
                 MDTextField:
+                    id: password
                     hint_text: "Password"
                 Widget:
                 MDBoxLayout:
@@ -23,6 +25,7 @@
                         MDRectangleFlatButton:
                             pos_hint: {"left": 1, "bottom": 1}
                             text: "Sign in!"
+                            on_press: root.sign_in()
 
                         MDRectangleFlatButton:
                             pos_hint: {"right": 1}
