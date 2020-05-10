@@ -10,6 +10,7 @@ from kivymd.uix.label import MDLabel
 
 from WIET_sourcing_app.pages.login_screen import LoginScreen
 from WIET_sourcing_app.pages.signup_screen import SignupScreen
+from WIET_sourcing_app.pages.main_screen import MainScreen
 from WIET_sourcing_app.services.auth_service import AuthService
 
 

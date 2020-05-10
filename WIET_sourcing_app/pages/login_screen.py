@@ -1,5 +1,4 @@
 from kivy.app import App
-from kivy.clock import Clock
 from kivy.uix.screenmanager import Screen
 
 import threading
@@ -21,4 +20,5 @@ class LoginScreen(Screen):
 		password = self.ids.password.text
 		if not app.auth_service.sign_in(email, password):
 			Snackbar(text="Failed to sign in!").show()
-
+		else:
+			app.change_screen("main_screen")
