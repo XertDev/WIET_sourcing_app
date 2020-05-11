@@ -4,9 +4,9 @@
 #:include WIET_sourcing_app/kv/signup_screen.kv
 #:include WIET_sourcing_app/kv/main_screen.kv
 GridLayout:
-    id: main-view
     cols: 1
-    FloatLayout:
+    NavigationLayout:
+        id: main_view
         ScreenManager:
             id: screen_manager
             LoginScreen:

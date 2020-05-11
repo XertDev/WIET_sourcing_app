@@ -7,6 +7,7 @@ from kivy.core.window import Window
 from kivy.uix.screenmanager import SlideTransition, NoTransition, CardTransition
 from kivymd.app import MDApp
 from kivymd.uix.label import MDLabel
+from kivymd.uix.navigationdrawer import MDNavigationDrawer
 
 from WIET_sourcing_app.pages.login_screen import LoginScreen
 from WIET_sourcing_app.pages.signup_screen import SignupScreen
@@ -30,7 +31,7 @@ class WIETSourcingApp(MDApp):
 		self.auth_service = AuthService()
 
 	def change_screen(self, screen_name, direction='forward'):
-		screen_manager = self.root.ids['screen_manager']
+		screen_manager = self.root.ids.screen_manager
 		if direction == 'forward':
 			direction = 'left'
 		elif direction == 'backward':
@@ -43,3 +44,6 @@ class WIETSourcingApp(MDApp):
 		screen_manager.transition = SlideTransition(direction=direction)
 
 		screen_manager.current = screen_name
+
+	def enable_drawer(self):
+		self.root.ids.main_view.add_widget(MDNavigationDrawer())

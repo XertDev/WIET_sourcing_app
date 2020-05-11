@@ -22,3 +22,4 @@ class LoginScreen(Screen):
 			Snackbar(text="Failed to sign in!").show()
 		else:
 			app.change_screen("main_screen")
+			app.enable_drawer()
