@@ -20,7 +20,7 @@ mutation SignUp($name: String!, $email: String!, $password: String!){
 }
 """)
 
-BACKEND_URL = 'https://wiet-sourcing.herokuapp.com/graphql'
+BACKEND_URL = 'http://wiet-sourcing.herokuapp.com/graphql'
 
 class AuthService:
 	def __init__(self) -> None:
