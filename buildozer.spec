@@ -1,7 +1,7 @@
 [app]
 
 # (str) Title of your application
-title = My Application
+title = WIET_sourcing
 
 # (str) Package name
 package.name = WIET_sourcing_app
