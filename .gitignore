@@ -1,4 +1,8 @@
 
+# Buildozer
+.buildozer
+bin/
+
 # Created by https://www.gitignore.io/api/venv,linux,flask,python,pycharm+all
 # Edit at https://www.gitignore.io/?templates=venv,linux,flask,python,pycharm+all
 
