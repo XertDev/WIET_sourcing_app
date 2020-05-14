@@ -9,7 +9,7 @@
                 orientation: "vertical"
                 
                 MDLabel:
-                    text: "WIET Sourcing"
+                    text: "Sign up"
                     halign: "center"
                 MDTextField:
                     id: name
@@ -30,9 +30,11 @@
                     padding: [0, -10, 0, 0]
                     RelativeLayout:
                         MDRectangleFlatButton:
+                            id: button_one
                             pos_hint: {"left": 1, "bottom": 1}
                             text: "Sign up!"
-                            on_release: root.sign_up()
+                            on_release:
+                                root.sign_up()
                         MDRectangleFlatButton:
                             pos_hint: {"right": 1}
                             text: "Back"
