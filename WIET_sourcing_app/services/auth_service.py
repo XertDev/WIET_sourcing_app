@@ -71,3 +71,27 @@ class AuthService:
 			return False
 
 		return "signUp" in result and result["signUp"]["success"]
+
+	def password_check(passwd):
+		SpecialSym = ['$', '@', '#', '%']
+		val = True
+
+		if len(passwd) < 8:
+			return 'Password should be at least eight characters long'
+
+		if len(passwd) > 20:
+			return 'length should be not be greater than 8'
+
+		if not any(char.isdigit() for char in passwd):
+			return 'Password should have at least one numeral'
+
+		if not any(char.isupper() for char in passwd):
+			return 'Password should have at least one uppercase letter'
+
+		if not any(char.islower() for char in passwd):
+			return 'Password should have at least one lowercase letter'
+
+		if not any(char in SpecialSym for char in passwd):
+			return 'Password should contain special characters $@#%'
+		return 'OK'
+

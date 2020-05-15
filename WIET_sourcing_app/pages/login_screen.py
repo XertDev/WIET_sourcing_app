@@ -17,11 +17,7 @@ class LoginScreen(Screen):
 		app.change_screen("signup_screen")
 
 	def sign_in(self):
-		success = threading.Thread(target=self.sign_in_worker).start()
-		if not success:
-			app = App.get_running_app()
-			self.ids['button_one'].md_bg_color = app.theme_cls.error_color
-			self.ids['button_one'].text_color = app.theme_cls.accent_color
+		threading.Thread(target=self.sign_in_worker).start()
 
 	def sign_in_worker(self):
 		app = App.get_running_app()
@@ -29,8 +25,8 @@ class LoginScreen(Screen):
 		password = self.ids.password.text
 		if not app.auth_service.sign_in(email, password):
 			Snackbar(text="Failed to sign in!").show()
-			return False
+			self.ids['button_one'].md_bg_color = app.theme_cls.error_color
+			self.ids['button_one'].text_color = app.theme_cls.accent_color
 		else:
 			app.change_screen("main_screen")
 			app.enable_drawer()
-			return True
