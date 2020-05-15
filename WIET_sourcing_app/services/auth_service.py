@@ -80,7 +80,7 @@ class AuthService:
 			return 'Password should be at least eight characters long'
 
 		if len(passwd) > 20:
-			return 'length should be not be greater than 8'
+			return 'Password length should be not be greater than 20'
 
 		if not any(char.isdigit() for char in passwd):
 			return 'Password should have at least one numeral'
