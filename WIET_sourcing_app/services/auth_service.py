@@ -1,73 +1,64 @@
-from gql import Client, gql
-from gql.transport.requests import RequestsHTTPTransport
+from aiogqlc import GraphQLClient
 
-SIGN_IN_MUTATION = gql("""
+SIGN_IN_MUTATION = """
 mutation SignIn($email: String!, $password: String!){
 	signIn(email: $email, password: $password)
 	{
-	success
-	token
+		token
 	}
 }
-""")
+"""
 
-SIGN_UP_MUTATION = gql("""
+SIGN_UP_MUTATION = """
 mutation SignUp($name: String!, $email: String!, $password: String!){
 	signUp(name: $name, email: $email, password: $password)
 	{
-		success
+		userProfile
+		{
+			id
+		}
 	}
 }
-""")
+"""
 
 BACKEND_URL = 'http://wiet-sourcing.herokuapp.com/graphql'
 
+
 class AuthService:
+	_client: GraphQLClient
+
 	def __init__(self) -> None:
-		self._transport = RequestsHTTPTransport(
-			url=BACKEND_URL,
-			use_json=True
-		)
+		self._client = GraphQLClient(BACKEND_URL)
 
-		self._client = Client(
-			transport=self._transport,
-			fetch_schema_from_transport=True
-		)
-
-	def sign_in(self, email: str, password: str) -> bool:
+	async def sign_in(self, email: str, password: str) -> bool:
 		payload = {"email": email, "password": password}
 		try:
-			result = self._client.execute(SIGN_IN_MUTATION, payload)
+			result = await self._client.execute(SIGN_IN_MUTATION, payload)
 		except Exception as e:
 			print(e)
 			return False
+		result = await result.json()
 
-		if "signIn" not in result:
+		if "errors" in result:
 			return False
+		result = result["data"]
 
-		if not result["signIn"]["success"]:
-			print("Failed to login")
-			return False
+		auth = 'Bearer {}'.format(result["signIn"]["token"])
 
-		self._transport = RequestsHTTPTransport(
-			url=BACKEND_URL,
-			use_json=True,
-			headers={
-				"Authorization": "Bearer " + result["signIn"]["token"]
-			}
-		)
-		self._client = Client(
-			transport=self._transport,
-			fetch_schema_from_transport=True
-		)
+		self._client.headers["Authorization"] = auth
+
 		return True
 
-	def sign_up(self, name: str, email: str, password: str) -> bool:
+	async def sign_up(self, name: str, email: str, password: str) -> bool:
 		payload = {"name": name, "email": email, "password": password}
 		try:
-			result = self._client.execute(SIGN_UP_MUTATION, payload)
+			result = await self._client.execute(SIGN_UP_MUTATION, payload)
 		except Exception as e:
 			print(e)
 			return False
 
-		return "signUp" in result and result["signUp"]["success"]
+		result = await result.json()
+		if "errors" in result:
+			return False
+
+		return True

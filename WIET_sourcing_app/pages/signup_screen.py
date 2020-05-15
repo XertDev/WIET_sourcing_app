@@ -1,3 +1,4 @@
+import asyncio
 import threading
 
 from kivy.app import App
@@ -17,12 +18,13 @@ class SignupScreen(Screen):
 		app.change_screen("login_screen", "backward")
 
 	def sign_up(self):
-		threading.Thread(target=self.sign_up_worker).start()
+		asyncio.ensure_future(self.sign_up_async())
 
-	def sign_up_worker(self):
+	async def sign_up_async(self):
 		app = App.get_running_app()
 		name = self.ids.name.text
 		email = self.ids.email.text
 		password = self.ids.password.text
-		if not app.auth_service.sign_up(name, email, password):
+
+		if not await app.auth_service.sign_up(name, email, password):
 			Snackbar(text="Failed to sign up!").show()
