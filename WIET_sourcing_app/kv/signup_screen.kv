@@ -9,39 +9,30 @@
                 orientation: "vertical"
                 
                 MDLabel:
-                    text: "Sign up"
+                    text: "WIET Sourcing"
                     halign: "center"
                 MDTextField:
                     id: name
                     hint_text: "Name"
                     write_tab: False
-                    multiline: False
                 MDTextField:
                     id: email
                     hint_text: "Email"
                     write_tab: False
-                    min_text_length: 8
-                    on_text: print(args[1])
                 MDTextField:
                     id: password
                     hint_text: "Password"
                     password: True
                     write_tab: False
-                    required: True
-                    bind: self.on_text_validate == root.validate(self,self.text)
-                    helper_text_mode: "on_error"
-                    helper_text: "Password must contain at least 8 characters"
                 Widget:
                 MDBoxLayout:
                     orientation: "horizontal"
                     padding: [0, -10, 0, 0]
                     RelativeLayout:
                         MDRectangleFlatButton:
-                            id: button_one
                             pos_hint: {"left": 1, "bottom": 1}
                             text: "Sign up!"
-                            on_release:
-                                root.sign_up()
+                            on_release: root.sign_up()
                         MDRectangleFlatButton:
                             pos_hint: {"right": 1}
                             text: "Back"
