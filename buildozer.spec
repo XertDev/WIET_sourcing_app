@@ -36,11 +36,13 @@ version = 0.1
 
 # (list) Application requirements
 # comma separated e.g. requirements = sqlite3,kivy
-requirements = python3,kivy,kivymd,openssl,gql==0.1.0,graphql-core==2.0.0,graphene,rx,promise,requests,urllib3
+requirements = python3,kivy==2.0.0rc2,kivymd,openssl,gql==0.1.0,graphql-core==2.0.0,graphene,rx,promise,requests,urllib3,aiogqlc,aiohttp,multidict,attrs,yarl,idna,async_timeout,chardet
 
 # (str) Custom source folders for requirements
 # Sets custom source for any requirements with recipes
 # requirements.source.kivy = ../../kivy
+
+
 
 # (list) Garden requirements
 #garden_requirements =
@@ -68,7 +70,7 @@ orientation = portrait
 osx.python_version = 3
 
 # Kivy version to use
-osx.kivy_version = 1.9.1
+osx.kivy_version = 2.0.0rc2
 
 #
 # Android specific
@@ -85,7 +87,7 @@ fullscreen = 0
 #android.presplash_color = #FFFFFF
 
 # (list) Permissions
-android.permissions = INTERNET
+android.permissions = INTERNET,WRITE_EXTERNAL_STORAGE,READ_EXTERNAL_STORAGE
 
 # (int) Target Android API, should be as high as possible.
 #android.api = 27
