@@ -46,8 +46,10 @@
                     multiline: False
             ScrollView:
                 scroll_wheel_distance: "100dp"
-                MDLabel:
-                    size_hint: 1, None
-                    size: self.texture_size
-                    text: "".join(['really some amazing text{}\n'.format(i) for i in range(200)])
+                GridLayout:
+                    id: set_list
+                    size_hint_y: None
+                    cols: 1
+                    minimum_height: self.height
+
 
