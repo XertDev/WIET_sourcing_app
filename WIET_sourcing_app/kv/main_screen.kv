@@ -1,13 +1,16 @@
+#:import colors kivymd.color_definitions.colors
+#:import utils kivy.utils
+
 <MainScreen>
     MDBoxLayout:
-        MDBoxLayout
+        MDBoxLayout:
+            md_bg_color: utils.get_color_from_hex(colors["BlueGray"]["50"])
             size_hint:  0.4, 1
             orientation: "vertical"
             AnchorLayout:
                 anchor_x: "center"
                 size_hint_y: None
                 height: avatar.height
-
                 Image:
                     id: avatar
                     size_hint: None, None
@@ -30,5 +33,21 @@
                 height: self.texture_size[1]
             Widget:
 
-        Button:
-            text:"Button"
+        MDBoxLayout:
+            height: self.minimum_height
+            orientation: "vertical"
+            MDBoxLayout:
+                id: filter_area
+                size_hint: 1, 0.2
+                padding: "20dp", 0
+                MDTextFieldRound:
+                    pos_hint: {"center_y": 0.5}
+                    size_hint: None, None
+                    multiline: False
+            ScrollView:
+                scroll_wheel_distance: "100dp"
+                MDLabel:
+                    size_hint: 1, None
+                    size: self.texture_size
+                    text: "".join(['really some amazing text{}\n'.format(i) for i in range(200)])
+
