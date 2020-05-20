@@ -278,3 +278,6 @@ venv.bak/
 pip-selfcheck.json
 
 # End of https://www.gitignore.io/api/venv,linux,flask,python,pycharm+all
+
+#app config
+store.json

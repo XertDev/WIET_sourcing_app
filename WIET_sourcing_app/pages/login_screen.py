@@ -27,4 +27,3 @@ class LoginScreen(Screen):
 			self.ids['button_one'].text_color = app.theme_cls.accent_color
 		else:
 			app.change_screen("main_screen")
-			app.enable_drawer()
