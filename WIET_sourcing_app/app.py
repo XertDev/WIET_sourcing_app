@@ -15,6 +15,7 @@ from WIET_sourcing_app.pages.signup_screen import SignupScreen
 from WIET_sourcing_app.pages.main_screen import MainScreen
 from WIET_sourcing_app.pages.splash_screen import SplashScreen
 from WIET_sourcing_app.services.auth_service import AuthService
+from WIET_sourcing_app.services.user_service import UserService
 
 sys.path.append("/".join(x for x in __file__.split("/")[:-1]))
 kivy.require('1.0.7')
@@ -36,6 +37,7 @@ class WIETSourcingApp(MDApp):
         super().__init__(**kwargs)
         self.title = "WIET sourcing"
         self.auth_service = AuthService(self.store)
+        self.user_service = UserService(self.auth_service.client, self.store)
 
     def change_screen(self, screen_name, direction='forward'):
         screen_manager = self.root.ids.screen_manager

@@ -50,7 +50,7 @@ class AuthService:
 		payload = {"email": email, "password": password}
 		try:
 			result = await self._client.execute(SIGN_IN_MUTATION, payload)
-		except Exception as e:
+		except ValueError as e:
 			print(e)
 			return False
 		result = await result.json()
@@ -115,4 +115,8 @@ class AuthService:
 		)
 
 		return True
+
+	@property
+	def client(self) -> GraphQLClient:
+		return self._client
 
