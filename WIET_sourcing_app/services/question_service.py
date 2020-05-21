@@ -27,7 +27,7 @@ class QuestionService:
 
     async def get_question_union(self, que_id, on_query):
         try:
-            result = await self._client.execute(QUERY_QUESTION % que_id, on_query)
+            result = await self._client.execute(QUERY_QUESTION % (que_id, on_query))
         except ValueError:
             print("Failed to query set questions")
             return None
