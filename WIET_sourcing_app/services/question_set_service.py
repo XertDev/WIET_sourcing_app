@@ -28,16 +28,26 @@ QUERY_SET_QUESTIONS = """
 	    questions{
       		edges{
         		node{
+        		    id
           			question{
-              			__typename
-            		}
+          			    __typename
+          			}
           	    }    
             }
         }
     }
+}"""
+
+QUERY_QUESTION = """
+{
+  question(id:"%s"){
+    question{
+      __typename,
+      ...on %s
+    }
+  }
 }
 """
-
 
 class QuestionSetService:
 	_client: GraphQLClient
@@ -89,8 +99,25 @@ class QuestionSetService:
 		result = result["data"]["questionSet"]["questions"]
 		questions = []
 		for edge in result["edges"]:
-			node = edge["node"]["question"]
+			node = edge["node"]
 			questions.append(QuestionInfo(
-				node["__typename"],
+				node["id"],
+				node["question"]["__typename"]
 			))
 		return questions
+
+	async def get_question_union(self, que_id, on_query):
+		try:
+			result = await self._client.execute(QUERY_QUESTION % que_id, on_query)
+		except ValueError:
+			print("Failed to query set questions")
+			return None
+
+		result = await result.json()
+
+		if "errors" in result:
+			print("Failed to query set questions")
+			return None
+
+		result = result["data"]["question"]["question"]
+		return result
