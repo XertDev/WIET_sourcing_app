@@ -9,3 +9,11 @@ class AbstractQuestionLoader(ABC):
         :return: question type name
         """
         pass
+
+    @staticmethod
+    @abstractmethod
+    def get_screen_name():
+        """
+        :return: screen class name
+        """
+        pass

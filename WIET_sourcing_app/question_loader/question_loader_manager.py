@@ -7,8 +7,10 @@ from typing import List, Any, Dict, Type, Tuple
 
 from kivy.app import App
 from kivy.lang import Builder
+from kivy.clock import Clock
 
 from .abstract_question_loader import AbstractQuestionLoader
+from .solve_set_mode import SolveSetMode
 
 
 class QuestionLoaderManager:
@@ -23,7 +25,9 @@ class QuestionLoaderManager:
 
     def __init__(self):
         self._loaders = {}
+        self._screens = []
         self.reload_loaders()
+        Clock.schedule_once(self.after_init)
 
     def reload_loaders(self) -> None:
         """
@@ -51,20 +55,31 @@ class QuestionLoaderManager:
                         if typename in self._loaders.keys():
                             raise RuntimeError("Duplicated loader! {}".format(typename))
                         self._loaders[typename] = loader_class
-                        screen_kv_path = imported_package.__path__[0]+'/'+loader_name.split('.')[-1]\
+
+                        loader_class_name = loader_name.split('.')[-1]
+                        screen_kv_path = imported_package.__path__[0]+'/'+loader_class_name\
                                          + '/' + loader_name.split('.')[-1] + '.kv'
                         Builder.load_file(screen_kv_path)
 
-    async def async_set_questions(self, set_id):
-        print("Loading question set:", set_id)
+                        screen = getattr(import_module(loader_name + '.' + loader_class_name + '_screen'),
+                                               loader_class.get_screen_name())
+                        self._screens.append((screen, loader_class.get_screen_name()))
+
+    def after_init(self, dt):
+        app = App.get_running_app()
+        for screen, loader_class_name in self._screens:
+            app.root.ids.screen_manager.add_widget(screen(name=loader_class_name))
+
+    async def async_set_questions_query(self, set_id):
+        # print("Loading question set:", set_id)
         app = App.get_running_app()
         res = await app.question_set_service.get_set_questions(set_id)
-        res = list(filter(lambda que: self.is_question_type_supported(que["typename"]), res))
-        print(res)
+        res = list(filter(lambda que: self.is_question_type_supported(que[1]), res))
+        SolveSetMode(res)
 
     def load_set_questions(self, button):
         set_id = button.set_id
-        self._task = asyncio.create_task(self.async_set_questions(set_id))
+        self._task = asyncio.create_task(self.async_set_questions_query(set_id))
 
     def is_question_type_supported(self, typename: str) -> bool:
         return typename in self._loaders.keys()
