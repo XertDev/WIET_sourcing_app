@@ -1,10 +1,20 @@
 import asyncio
 from asyncio import Task
 from time import sleep
+from functools import partial
 
 from kivy.app import App
 from kivy.uix.screenmanager import Screen
 from kivymd.uix.label import MDLabel
+from kivymd.uix.button import MDRectangleFlatButton
+
+from WIET_sourcing_app.loaders.question_set_loader import QuestionLoaderManager
+
+
+class SetButton(MDRectangleFlatButton):
+	def __init__(self, set_id, **kwargs):
+		self.set_id = set_id
+		super().__init__(**kwargs)
 
 
 class MainScreen(Screen):
@@ -35,5 +45,7 @@ class MainScreen(Screen):
 		question_sets = await app.question_set_service.query_question_sets()
 		for question_set in question_sets:
 			self.ids.set_list.add_widget(
-				MDLabel(text=question_set.name+" "+str(question_set.question_count))
+				SetButton(text=question_set.name+" "+str(question_set.question_count),
+						set_id=question_set.id,
+						on_press=partial(QuestionLoaderManager.load_set_questions, ''))
 			)

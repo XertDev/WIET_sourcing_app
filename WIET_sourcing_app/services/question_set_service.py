@@ -14,6 +14,7 @@ query AllQuestionSets{
 				details
 				closeDate
 				questionCount
+				id
 			}
 		}
 	}
@@ -50,6 +51,7 @@ class QuestionSetService:
 				node["name"],
 				node["details"],
 				node["closeDate"],
-				node["questionCount"]
+				node["questionCount"],
+				node["id"]
 			))
 		return sets
