@@ -8,7 +8,7 @@ from kivy.uix.screenmanager import Screen
 from kivymd.uix.label import MDLabel
 from kivymd.uix.button import MDRectangleFlatButton
 
-from WIET_sourcing_app.loaders.question_set_loader import QuestionLoaderManager
+from WIET_sourcing_app.question_loader.question_loader_manager import QuestionLoaderManager
 
 
 class SetButton(MDRectangleFlatButton):
