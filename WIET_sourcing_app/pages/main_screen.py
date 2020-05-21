@@ -46,6 +46,5 @@ class MainScreen(Screen):
 		for question_set in question_sets:
 			self.ids.set_list.add_widget(
 				SetButton(text=question_set.name+" "+str(question_set.question_count),
-						set_id=question_set.id,
-						on_press=partial(QuestionLoaderManager.load_set_questions, ''))
+						set_id=question_set.id)
 			)
