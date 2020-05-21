@@ -38,16 +38,6 @@ QUERY_SET_QUESTIONS = """
     }
 }"""
 
-QUERY_QUESTION = """
-{
-  question(id:"%s"){
-    question{
-      __typename,
-      ...on %s
-    }
-  }
-}
-"""
 
 class QuestionSetService:
 	_client: GraphQLClient
@@ -106,18 +96,3 @@ class QuestionSetService:
 			))
 		return questions
 
-	async def get_question_union(self, que_id, on_query):
-		try:
-			result = await self._client.execute(QUERY_QUESTION % que_id, on_query)
-		except ValueError:
-			print("Failed to query set questions")
-			return None
-
-		result = await result.json()
-
-		if "errors" in result:
-			print("Failed to query set questions")
-			return None
-
-		result = result["data"]["question"]["question"]
-		return result
