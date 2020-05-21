@@ -10,6 +10,7 @@ query AllQuestionSets{
 	allQuestionSets{
 		edges{
 			node{
+				id
 				name
 				details
 				closeDate
@@ -47,6 +48,7 @@ class QuestionSetService:
 		for edge in result["edges"]:
 			node = edge["node"]
 			sets.append(QuestionSetInfo(
+				node["id"],
 				node["name"],
 				node["details"],
 				node["closeDate"],

@@ -116,6 +116,9 @@ class AuthService:
 
 		return True
 
+	def sign_out(self):
+		del self._client.headers["Authorization"]
+
 	@property
 	def client(self) -> GraphQLClient:
 		return self._client

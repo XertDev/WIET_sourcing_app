@@ -6,6 +6,7 @@ from WIET_sourcing_app.models.user_profile import UserProfile
 USER_INFO = """
 query userInfo{
 	me{
+		id
 		name
 		wietPoints
 	}
@@ -21,7 +22,7 @@ class UserService:
 	def __init__(self, client: GraphQLClient, store: AbstractStore) -> None:
 		self._client = client
 		self._store = store
-		self._user_info = UserProfile("", 0)
+		self._user_info = UserProfile("", "", 0)
 
 	@property
 	def user_info(self):
@@ -41,4 +42,4 @@ class UserService:
 			return
 
 		result = result["data"]["me"]
-		self._user_info = UserProfile(result["name"], result["wietPoints"])
+		self._user_info = UserProfile(result["id"], result["name"], result["wietPoints"])

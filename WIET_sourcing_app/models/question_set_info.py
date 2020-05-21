@@ -1,3 +1,3 @@
 import collections
 
-QuestionSetInfo = collections.namedtuple('QuestionSetInfo', 'name details close_date question_count')
+QuestionSetInfo = collections.namedtuple('QuestionSetInfo', 'id name details close_date question_count')
