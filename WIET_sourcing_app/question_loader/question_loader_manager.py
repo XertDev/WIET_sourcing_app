@@ -6,6 +6,7 @@ from importlib import import_module
 from typing import List, Any, Dict, Type, Tuple
 
 from kivy.app import App
+from kivy.lang import Builder
 
 from .abstract_question_loader import AbstractQuestionLoader
 
@@ -50,11 +51,15 @@ class QuestionLoaderManager:
                         if typename in self._loaders.keys():
                             raise RuntimeError("Duplicated loader! {}".format(typename))
                         self._loaders[typename] = loader_class
+                        screen_kv_path = imported_package.__path__[0]+'/'+loader_name.split('.')[-1]\
+                                         + '/' + loader_name.split('.')[-1] + '.kv'
+                        Builder.load_file(screen_kv_path)
 
     async def async_set_questions(self, set_id):
         print("Loading question set:", set_id)
         app = App.get_running_app()
         res = await app.question_set_service.get_set_questions(set_id)
+        res = list(filter(lambda que: self.is_question_type_supported(que["typename"]), res))
         print(res)
 
     def load_set_questions(self, button):
