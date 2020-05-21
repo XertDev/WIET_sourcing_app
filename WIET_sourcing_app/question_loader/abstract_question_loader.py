@@ -17,3 +17,11 @@ class AbstractQuestionLoader(ABC):
         :return: screen class name
         """
         pass
+
+    @staticmethod
+    @abstractmethod
+    def get_on_query():
+        """
+        :return: query used to retrieve union from node
+        """
+        pass

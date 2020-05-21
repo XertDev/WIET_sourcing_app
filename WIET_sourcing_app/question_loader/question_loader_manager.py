@@ -3,14 +3,14 @@ from asyncio import Task
 import inspect
 import pkgutil
 from importlib import import_module
-from typing import List, Any, Dict, Type, Tuple
+from typing import Dict, Type
 
 from kivy.app import App
 from kivy.lang import Builder
 from kivy.clock import Clock
 
 from .abstract_question_loader import AbstractQuestionLoader
-from .solve_set_mode import SolveSetMode
+from WIET_sourcing_app.libs.solve_set_mode import SolveSetMode
 
 
 class QuestionLoaderManager:
@@ -75,7 +75,8 @@ class QuestionLoaderManager:
         app = App.get_running_app()
         res = await app.question_set_service.get_set_questions(set_id)
         res = list(filter(lambda que: self.is_question_type_supported(que[1]), res))
-        SolveSetMode(res)
+        app.solve_set_mode.load_questions(res)
+        app.solve_set_mode.show_next_question()
 
     def load_set_questions(self, button):
         set_id = button.set_id
@@ -84,3 +85,8 @@ class QuestionLoaderManager:
     def is_question_type_supported(self, typename: str) -> bool:
         return typename in self._loaders.keys()
 
+    def get_screen_by_typename(self, typename):
+        return self._loaders[typename].get_screen_name()
+
+    def get_on_query_by_typename(self, typename):
+        return self._loaders[typename].get_on_query()

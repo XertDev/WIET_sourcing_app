@@ -19,6 +19,7 @@ from WIET_sourcing_app.services.question_set_service import QuestionSetService
 from WIET_sourcing_app.services.question_service import QuestionService
 from WIET_sourcing_app.services.user_service import UserService
 from WIET_sourcing_app.question_loader.question_loader_manager import QuestionLoaderManager
+from WIET_sourcing_app.libs.solve_set_mode import SolveSetMode
 
 sys.path.append("/".join(x for x in __file__.split("/")[:-1]))
 kivy.require('1.0.7')
@@ -44,6 +45,7 @@ class WIETSourcingApp(MDApp):
         self.question_set_service = QuestionSetService(self.auth_service.client, self.store)
         self.question_service = QuestionService(self.auth_service.client, self.store)
         self.question_loader_manager = QuestionLoaderManager()
+        self.solve_set_mode = SolveSetMode()
 
     def change_screen(self, screen_name, direction='forward'):
         screen_manager = self.root.ids.screen_manager

@@ -2,7 +2,7 @@ from WIET_sourcing_app.question_loader.abstract_question_loader import AbstractQ
 
 from .text_question_screen import TextQuestionScreen
 
-on_query = """
+ON_QUERY = """
 TextQuestionNode{
     multiAnswer
     question
@@ -19,6 +19,10 @@ class TextQuestionLoader(AbstractQuestionLoader):
     @staticmethod
     def get_screen_name():
         return "TextQuestionScreen"
+
+    @staticmethod
+    def get_on_query():
+        return ON_QUERY
 
     @staticmethod
     def load_question(payload):
