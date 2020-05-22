@@ -6,7 +6,7 @@ from kivy.app import App
 from kivy.uix.screenmanager import Screen
 from kivymd.uix.label import MDLabel
 
-from WIET_sourcing_app.widgets.data_table import DataTable
+from WIET_sourcing_app.widgets.data_table import data_table
 
 
 class MainScreen(Screen):

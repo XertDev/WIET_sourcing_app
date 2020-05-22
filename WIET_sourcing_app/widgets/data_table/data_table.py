@@ -1,20 +1,17 @@
 #Based on https://github.com/HeaTTheatR/KivyMD/blob/master/kivymd/uix/datatables.py
-import abc
-from typing import List, Any, NamedTuple
-
+import rx
 from kivy.lang import Builder
 from kivy.metrics import dp
-from kivy.properties import ObjectProperty, ListProperty, StringProperty, DictProperty
-from kivy.uix.behaviors import ButtonBehavior
+from kivy.properties import ListProperty, StringProperty, DictProperty
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.recycleview import RecycleView
-from kivy.uix.recycleview.views import RecycleDataViewBehavior
 from kivy.uix.scrollview import ScrollView
 from kivymd.theming import ThemableBehavior
-from kivymd.uix.behaviors import HoverBehavior
+from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.tooltip import MDTooltip
 
-from WIET_sourcing_app.widgets.data_provider import DummyProvider, AbstractDataProvider
+from WIET_sourcing_app.widgets.data_table.data_provider import DummyProvider, AbstractDataProvider
+from WIET_sourcing_app.widgets.data_table.data_table_paginator import DataTablePaginator
 
 Builder.load_string(
 	"""
@@ -63,6 +60,43 @@ Builder.load_string(
 				DataTableCellHeader:
 					id: first_cell
 
+<DataTablePagination>
+	adaptive_height: True
+	spacing: "8dp"
+	
+	Widget:
+	
+	MDLabel:
+		text: "Rows per page"
+		size_hint: None, 1
+		width: self.texture_size[0]
+		text_size: None, None
+		font_style: "Caption"
+		
+	MDDropDownItem:
+		id: item_per_page
+		pos_hint: {"center_y": .5}
+		font_size: "14sp"
+	
+	MDLabel:
+		id: label_items_per_page
+		size_hint: None, 1
+		text_size: None, None
+		font_style: "Caption"
+	
+	MDIconButton:
+		id: back_button
+		icon: "chevron-left"
+		user_font_size: "20sp"
+		pos_hint: {"center_y": .5}
+		disabled: True
+	
+	MDIconButton:
+		id: forward_button
+		icon: "chevron-right"
+		user_font_size: "20sp"
+		pos_hint: {"center_y": .5}
+
 <DataTable>
 	orientation: "vertical"
 	canvas:
@@ -73,6 +107,34 @@ Builder.load_string(
 			size: self.size
 	"""
 )
+
+
+class DataTablePagination(ThemableBehavior, MDBoxLayout):
+	_paginator: DataTablePaginator
+
+	def __init__(self, paginator: DataTablePaginator, **kwargs):
+		super().__init__(**kwargs)
+		self._paginator = paginator
+		self._page_obs = self._paginator.page_size.subscribe(self.update_page_size_label)
+		self._range_obs = rx.Observable.combine_latest(
+			self._paginator.page,
+			self._paginator.page_size,
+			self._paginator.item_count,
+			lambda a, b, c: (a, b, c)
+		).subscribe(self.update_page_range)
+
+	def update_page_range(self, start_count):
+		start = start_count[0] * start_count[1]
+		items_count = start_count[2]
+		end = min(start + start_count[1], items_count)
+		self.ids.label_items_per_page.text = f"{start}-{end} of {items_count}"
+
+	def update_page_size_label(self, page_size: int):
+		self.ids.item_per_page.text = str(page_size)
+
+	def __del__(self):
+		self._page_obs.dispose()
+		self._range_obs.dispose()
 
 
 class DataTableCellHeader(MDTooltip, BoxLayout):
@@ -103,6 +165,7 @@ class DataTableHeader(ScrollView):
 
 		self.ids.header.cols_minimum = self.column_minimum
 
+
 class DataTableView(RecycleView):
 	def __init__(self,  **kwargs):
 		super(DataTableView, self).__init__(**kwargs)
@@ -111,14 +174,19 @@ class DataTableView(RecycleView):
 class DataTable(BoxLayout):
 	_table_view: DataTableView
 	_header: DataTableHeader
-
+	_pagination: DataTablePagination
+	paginator: DataTablePaginator
 	data_provider: AbstractDataProvider = DummyProvider()
 
 	def __init__(self, **kwargs):
 		super(DataTable, self).__init__(**kwargs)
 		self._table_view = DataTableView()
 		self._header = DataTableHeader(["No."] + self.data_provider.get_columns())
+
+		self.paginator = DataTablePaginator()
+		self._pagination = DataTablePagination(self.paginator)
+
 		self.add_widget(self._header)
 		self.add_widget(self._table_view)
-
+		self.add_widget(self._pagination)
 
