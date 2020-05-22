@@ -12,11 +12,15 @@ class AnswerTextFieldWidget(MDTextField):
 
 
 class SingleAnswerCheck(MDCheckbox):
-    pass
+    def __init__(self, stored_index, **kwargs):
+        self.stored_index = stored_index
+        super().__init__(**kwargs)
 
 
 class MultipleAnswerCheck(MDCheckbox):
-    pass
+    def __init__(self, stored_index, **kwargs):
+        self.stored_index = stored_index
+        super().__init__(**kwargs)
 
 
 class TextQuestionScreen(Screen):
