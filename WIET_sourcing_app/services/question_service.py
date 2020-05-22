@@ -16,6 +16,14 @@ QUERY_QUESTION = """
 }
 """
 
+ADD_ANSWER_MUTATION ="""
+mutation{
+  %s{
+  	success
+  }
+}
+"""
+
 
 class QuestionService:
     _client: GraphQLClient
@@ -39,4 +47,18 @@ class QuestionService:
             return None
 
         result = result["data"]["question"]["question"]
+        return result
+
+    async def add_question_answer(self, mutation) -> bool:
+        try:
+            result = await self._client.execute(ADD_ANSWER_MUTATION % mutation)
+        except ValueError as e:
+            print(e)
+            return False
+
+        result = await result.json()
+        if "errors" in result:
+            return False
+
+        result = result["data"][mutation.split('(')[0]]["success"]
         return result

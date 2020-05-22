@@ -28,6 +28,11 @@ class AbstractQuestionLoader(ABC):
 
     @staticmethod
     @abstractmethod
+    def get_create_answer_mutation(screen, question_id):
+        pass
+
+    @staticmethod
+    @abstractmethod
     def set_screen_view(screen, question):
         """
         :description: Sets screen according to question

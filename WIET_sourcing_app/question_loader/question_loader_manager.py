@@ -85,11 +85,19 @@ class QuestionLoaderManager:
     def is_question_type_supported(self, typename: str) -> bool:
         return typename in self._loaders.keys()
 
-    def get_screen_by_typename(self, typename):
+    def get_screen_name_by_typename(self, typename):
         return self._loaders[typename].get_screen_name()
+
+    def get_screen_by_typename(self, typename):
+        screen_name = self.get_screen_name_by_typename(typename)
+        return App.get_running_app().root.ids.screen_manager.get_screen(screen_name)
 
     def get_on_query_by_typename(self, typename):
         return self._loaders[typename].get_on_query()
+
+    def get_create_answer_mutation(self, typename, question_id):
+        screen = self.get_screen_by_typename(typename)
+        return self._loaders[typename].get_create_answer_mutation(screen, question_id)
 
     def set_screen(self, screen, question):
         self._loaders[question["__typename"]].set_screen_view(screen, question)

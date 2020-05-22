@@ -6,9 +6,10 @@ def set_screen_view(screen, question):
     screen.ids.user_input_layout.clear_widgets()
     screen.ids.label_test.text = question["question"]
 
-    for que in question["answers"]:
-        screen.ids.user_input_layout.add_widget(MultipleAnswerCheck() if question["multiAnswer"]
-                                                else SingleAnswerCheck())
+    for k in range(len(question["answers"])):
+        que = question["answers"][k]
+        screen.ids.user_input_layout.add_widget(MultipleAnswerCheck(stored_index=k) if question["multiAnswer"]
+                                                else SingleAnswerCheck(stored_index=k))
         screen.ids.user_input_layout.add_widget(MDLabel(text=que))
 
     if len(question["answers"]) == 0:
