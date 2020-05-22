@@ -92,16 +92,16 @@ class DataTableView(RecycleView):
 			data.append(
 				{
 					"text": str(row_index),
-					"Index": row_index,
+					"Index": row_data[0],
 					"table": self
 				}
 			)
 
-			for cell_data in row_data:
+			for cell_data in row_data[1]:
 				data.append(
 					{
 						"text": str(cell_data),
-						"Index": row_index,
+						"Index": row_data[0],
 						"table": self
 					}
 				)

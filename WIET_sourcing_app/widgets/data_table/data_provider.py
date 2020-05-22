@@ -1,5 +1,5 @@
 import abc
-from typing import List, Any, NamedTuple
+from typing import List, Any
 
 
 class AbstractDataProvider(abc.ABC):
@@ -18,7 +18,7 @@ class AbstractDataProvider(abc.ABC):
 
 class DummyProvider(AbstractDataProvider):
 	def get_page_rows(self, page_num: int, size) -> List[tuple]:
-		return [(i, 2*i) for i in range(page_num, page_num + size)]
+		return [("row"+str(i), (i, 2*i)) for i in range(page_num, page_num + size)]
 
 	def get_columns(self) -> List[str]:
 		return ["col", "2xcol"]
