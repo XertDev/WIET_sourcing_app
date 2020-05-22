@@ -90,3 +90,6 @@ class QuestionLoaderManager:
 
     def get_on_query_by_typename(self, typename):
         return self._loaders[typename].get_on_query()
+
+    def set_screen(self, screen, question):
+        self._loaders[question["__typename"]].set_screen_view(screen, question)

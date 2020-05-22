@@ -1,6 +1,6 @@
 from WIET_sourcing_app.question_loader.abstract_question_loader import AbstractQuestionLoader
 
-from .text_question_screen import TextQuestionScreen
+from .solve_mode import set_screen_view
 
 ON_QUERY = """
 TextQuestionNode{
@@ -25,5 +25,5 @@ class TextQuestionLoader(AbstractQuestionLoader):
         return ON_QUERY
 
     @staticmethod
-    def load_question(payload):
-        pass
+    def set_screen_view(screen, question):
+        set_screen_view(screen, question)

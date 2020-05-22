@@ -25,3 +25,12 @@ class AbstractQuestionLoader(ABC):
         :return: query used to retrieve union from node
         """
         pass
+
+    @staticmethod
+    @abstractmethod
+    def set_screen_view(screen, question):
+        """
+        :description: Sets screen according to question
+        :return:
+        """
+        pass
