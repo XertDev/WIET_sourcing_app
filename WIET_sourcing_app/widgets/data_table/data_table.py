@@ -1,5 +1,6 @@
 #Based on https://github.com/HeaTTheatR/KivyMD/blob/master/kivymd/uix/datatables.py
 import rx
+from kivy.clock import Clock
 from kivy.lang import Builder
 from kivy.metrics import dp
 from kivy.properties import ListProperty, StringProperty, DictProperty
@@ -8,6 +9,7 @@ from kivy.uix.recycleview import RecycleView
 from kivy.uix.scrollview import ScrollView
 from kivymd.theming import ThemableBehavior
 from kivymd.uix.boxlayout import MDBoxLayout
+from kivymd.uix.menu import MDDropdownMenu
 from kivymd.uix.tooltip import MDTooltip
 
 from WIET_sourcing_app.widgets.data_table.data_provider import DummyProvider, AbstractDataProvider
@@ -77,6 +79,7 @@ Builder.load_string(
 		id: item_per_page
 		pos_hint: {"center_y": .5}
 		font_size: "14sp"
+		on_release: root._pagination_menu.open()
 	
 	MDLabel:
 		id: label_items_per_page
@@ -111,6 +114,7 @@ Builder.load_string(
 
 class DataTablePagination(ThemableBehavior, MDBoxLayout):
 	_paginator: DataTablePaginator
+	_pagination_menu: MDDropdownMenu
 
 	def __init__(self, paginator: DataTablePaginator, **kwargs):
 		super().__init__(**kwargs)
@@ -123,14 +127,31 @@ class DataTablePagination(ThemableBehavior, MDBoxLayout):
 			lambda a, b, c: (a, b, c)
 		).subscribe(self.update_page_range)
 
+		Clock.schedule_once(self.create_pagination_menu, 0.5)
+
 	def update_page_range(self, start_count):
 		start = start_count[0] * start_count[1]
 		items_count = start_count[2]
 		end = min(start + start_count[1], items_count)
+		if end == items_count:
+			self.ids.forward_button.disabled = True
 		self.ids.label_items_per_page.text = f"{start}-{end} of {items_count}"
 
 	def update_page_size_label(self, page_size: int):
 		self.ids.item_per_page.text = str(page_size)
+
+	def create_pagination_menu(self, interval):
+		items = [
+			{"text": f"{i}"} for i in [5, 10, 20, 50]
+		]
+		self._pagination_menu = MDDropdownMenu(
+			caller=self.ids.item_per_page,
+			items=items,
+			use_icon_item=False,
+			position="auto",
+			max_height="140dp",
+			width_mult=2
+		)
 
 	def __del__(self):
 		self._page_obs.dispose()
