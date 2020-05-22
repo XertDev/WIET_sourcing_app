@@ -8,13 +8,20 @@ class AbstractDataProvider(abc.ABC):
 		pass
 
 	@abc.abstractmethod
-	def get_columns(self):
+	def get_columns(self) -> List[str]:
+		pass
+
+	@abc.abstractmethod
+	def get_row_count(self) -> int:
 		pass
 
 
 class DummyProvider(AbstractDataProvider):
-	def get_page_rows(self, page_num: int, size) -> List[NamedTuple]:
-		return []
+	def get_page_rows(self, page_num: int, size) -> List[tuple]:
+		return [(i, 2*i) for i in range(page_num, page_num + size)]
 
 	def get_columns(self) -> List[str]:
-		return 	["col"]
+		return ["col", "2xcol"]
+
+	def get_row_count(self) -> int:
+		return 1000

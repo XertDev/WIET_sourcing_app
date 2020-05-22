@@ -57,7 +57,6 @@ class DataTableHeader(ScrollView):
 				)
 			else:
 				self.ids.first_cell.text = heading
-				self.ids.first_cell.ids.separator.height = 0
 				self.ids.first_cell.width = self.column_minimum[i]
 
 		self.ids.header.cols_minimum = self.column_minimum
