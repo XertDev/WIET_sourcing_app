@@ -38,3 +38,9 @@ class DataTablePaginator:
 		if item_count < 0:
 			raise ValueError("Item count must be bigger than 0")
 		self._item_count.on_next(item_count)
+
+	def next_page(self):
+		self._page.on_next(self._page.value+1)
+
+	def prev_page(self):
+		self._page.on_next(self._page.value-1)

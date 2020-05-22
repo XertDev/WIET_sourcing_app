@@ -40,12 +40,15 @@ Builder.load_string("""
 		user_font_size: "20sp"
 		pos_hint: {"center_y": .5}
 		disabled: True
+		on_release: root._paginator.prev_page()
 	
 	MDIconButton:
 		id: forward_button
 		icon: "chevron-right"
 		user_font_size: "20sp"
 		pos_hint: {"center_y": .5}
+		on_release: root._paginator.next_page()
+
 """)
 
 
@@ -72,6 +75,14 @@ class DataTablePagination(ThemableBehavior, MDBoxLayout):
 		end = min(start + start_count[1], items_count)
 		if end == items_count:
 			self.ids.forward_button.disabled = True
+		else:
+			self.ids.forward_button.disabled = False
+
+		if start == 0:
+			self.ids.back_button.disabled = True
+		else:
+			self.ids.back_button.disabled = False
+
 		self.ids.label_items_per_page.text = f"{start}-{end} of {items_count}"
 
 	def update_page_size_label(self, page_size: int):

@@ -3,7 +3,7 @@ from typing import List, Dict
 
 import rx
 from kivy.lang import Builder
-from kivy.properties import NumericProperty, ListProperty, DictProperty, ObjectProperty
+from kivy.properties import NumericProperty, DictProperty, ObjectProperty
 from kivy.uix.behaviors import FocusBehavior
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.recyclegridlayout import RecycleGridLayout
