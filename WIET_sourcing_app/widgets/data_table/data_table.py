@@ -14,6 +14,7 @@ from kivymd.uix.tooltip import MDTooltip
 
 from WIET_sourcing_app.widgets.data_table.data_provider import DummyProvider, AbstractDataProvider
 from WIET_sourcing_app.widgets.data_table.data_table_paginator import DataTablePaginator
+from WIET_sourcing_app.widgets.drop_down.drop_down_menu import WIETDropdownMenu
 
 Builder.load_string(
 	"""
@@ -142,16 +143,23 @@ class DataTablePagination(ThemableBehavior, MDBoxLayout):
 
 	def create_pagination_menu(self, interval):
 		items = [
-			{"text": f"{i}"} for i in [5, 10, 20, 50]
+			{
+				"text": f"{i}"
+			} for i in [5, 10, 20, 50]
 		]
-		self._pagination_menu = MDDropdownMenu(
+		self._pagination_menu = WIETDropdownMenu(
 			caller=self.ids.item_per_page,
 			items=items,
-			use_icon_item=False,
 			position="auto",
 			max_height="140dp",
-			width_mult=2
+			callback=self.set_page_size,
+			use_icon_item=False,
+			width_mult=1
 		)
+
+	def set_page_size(self, instance_menu_item):
+		item_page_count = int(instance_menu_item.text)
+		self._paginator.set_page_size(item_page_count)
 
 	def __del__(self):
 		self._page_obs.dispose()
