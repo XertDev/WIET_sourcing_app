@@ -4,6 +4,7 @@ import sys
 from kivy import Config
 import kivy.utils
 from kivy.core.window import Window
+from kivy.modules import inspector
 from kivy.storage.jsonstore import JsonStore
 from kivy.uix.screenmanager import SlideTransition, NoTransition, CardTransition
 from kivymd.app import MDApp
@@ -40,6 +41,10 @@ class WIETSourcingApp(MDApp):
         self.auth_service = AuthService(self.store)
         self.user_service = UserService(self.auth_service.client, self.store)
         self.question_set_service = QuestionSetService(self.auth_service.client, self.store)
+
+    def build(self):
+        inspector.create_inspector(Window, self.root.ids.screen_manager)
+        return super().build()
 
     def change_screen(self, screen_name, direction='forward'):
         screen_manager = self.root.ids.screen_manager

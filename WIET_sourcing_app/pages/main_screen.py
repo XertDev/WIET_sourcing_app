@@ -6,13 +6,15 @@ from kivy.app import App
 from kivy.uix.screenmanager import Screen
 from kivymd.uix.label import MDLabel
 
+from WIET_sourcing_app.widgets.data_table import DataTable
+
 
 class MainScreen(Screen):
 	_task: Task
 
 	def on_pre_enter(self, *args):
 		self._task = asyncio.create_task(self.query_user_info())
-		self._task = asyncio.create_task(self.query_question_sets())
+		#self._task = asyncio.create_task(self.query_question_sets())
 		super().on_pre_enter(*args)
 
 	def on_pre_leave(self, *args):
