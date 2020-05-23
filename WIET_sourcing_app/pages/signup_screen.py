@@ -18,7 +18,11 @@ class SignupScreen(Screen):
 		app.change_screen("login_screen", "backward")
 
 	def sign_up(self):
-		asyncio.ensure_future(self.sign_up_async())
+		app = App.get_running_app()
+		app.auth_service.set_email("Aleksandra@student.agh.edu.pl")
+		app.change_screen("confirm_email_screen", "forward")
+
+	# asyncio.ensure_future(self.sign_up_async())
 
 	async def sign_up_async(self):
 		app = App.get_running_app()
@@ -26,5 +30,10 @@ class SignupScreen(Screen):
 		email = self.ids.email.text
 		password = self.ids.password.text
 
+		app.auth_service.set_email(email)
+
 		if not await app.auth_service.sign_up(name, email, password):
 			Snackbar(text="Failed to sign up!").show()
+		else:
+			app.change_screen("confirm_email_screen", "forward")
+

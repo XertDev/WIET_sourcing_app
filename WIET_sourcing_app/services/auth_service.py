@@ -33,6 +33,16 @@ mutation RefreshToken{
 }
 """
 
+CONFIRM_EMAIL_MUTATION = """
+mutation ConfirmEmail($email: String!, $code: String!) {
+	confirmEmail(email: $email, code: $code) {
+		userProfile{
+			id
+		}
+	}
+}
+"""
+
 BACKEND_URL = 'http://wiet-sourcing.herokuapp.com/graphql'
 
 AUTH_TOKEN_KEY = "AUTH_TOKEN"
@@ -45,6 +55,7 @@ class AuthService:
 	def __init__(self, store: AbstractStore) -> None:
 		self._client = GraphQLClient(BACKEND_URL)
 		self._store = store
+		self.email = ""
 
 	async def sign_in(self, email: str, password: str) -> bool:
 		payload = {"email": email, "password": password}
@@ -73,6 +84,25 @@ class AuthService:
 		payload = {"name": name, "email": email, "password": password}
 		try:
 			result = await self._client.execute(SIGN_UP_MUTATION, payload)
+		except ValueError:
+			return False
+
+		result = await result.json()
+		if "errors" in result:
+			return False
+
+		return True
+
+	def set_email(self, email):
+		self.email = email
+
+	def get_email(self):
+		return self.email
+
+	async def confirm_email(self, email: str, code: str) -> bool:
+		payload = {"email": email, "code": code}
+		try:
+			result = await self._client.execute(CONFIRM_EMAIL_MUTATION, payload)
 		except ValueError:
 			return False
 

@@ -4,6 +4,7 @@
 #:include WIET_sourcing_app/kv/signup_screen.kv
 #:include WIET_sourcing_app/kv/main_screen.kv
 #:include WIET_sourcing_app/kv/splash_screen.kv
+#:include WIET_sourcing_app/kv/confirm_email_screen.kv
 
 GridLayout:
     cols: 1
@@ -20,6 +21,9 @@ GridLayout:
             SignupScreen:
                 name: "signup_screen"
                 id: signup_screen
+            ConfirmEmailScreen:
+                name: "confirm_email_screen"
+                id: confirm_email_screen
             MainScreen:
                 name: "main_screen"
                 id: main_screen

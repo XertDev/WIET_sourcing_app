@@ -14,6 +14,7 @@ from WIET_sourcing_app.pages.login_screen import LoginScreen
 from WIET_sourcing_app.pages.signup_screen import SignupScreen
 from WIET_sourcing_app.pages.main_screen import MainScreen
 from WIET_sourcing_app.pages.splash_screen import SplashScreen
+from WIET_sourcing_app.pages.confirm_email_screen import ConfirmEmailScreen
 from WIET_sourcing_app.services.auth_service import AuthService
 from WIET_sourcing_app.services.question_set_service import QuestionSetService
 from WIET_sourcing_app.services.user_service import UserService
