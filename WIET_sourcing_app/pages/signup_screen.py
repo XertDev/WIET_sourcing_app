@@ -19,10 +19,7 @@ class SignupScreen(Screen):
 
 	def sign_up(self):
 		app = App.get_running_app()
-		app.auth_service.set_email("Aleksandra@student.agh.edu.pl")
-		app.change_screen("confirm_email_screen", "forward")
-
-	# asyncio.ensure_future(self.sign_up_async())
+		asyncio.ensure_future(self.sign_up_async())
 
 	async def sign_up_async(self):
 		app = App.get_running_app()
