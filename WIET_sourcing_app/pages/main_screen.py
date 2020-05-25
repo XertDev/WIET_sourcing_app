@@ -47,16 +47,6 @@ class MainScreen(Screen):
 			self.update_view()
 			await asyncio.sleep(10)
 
-	async def query_question_sets(self):
-		app = App.get_running_app()
-		question_sets = await app.question_set_service.query_question_sets()
-		self.ids.set_list.clear_widgets()
-		for question_set in question_sets:
-			self.ids.set_list.add_widget(
-				SetButton(text=question_set.name+" "+str(question_set.question_count),
-						set_id=question_set.id)
-			)
-
 	def sign_out(self):
 		app = App.get_running_app()
 		app.auth_service.sign_out()
