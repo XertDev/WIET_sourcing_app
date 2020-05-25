@@ -56,3 +56,8 @@ class MainScreen(Screen):
 				SetButton(text=question_set.name+" "+str(question_set.question_count),
 						set_id=question_set.id)
 			)
+
+	def sign_out(self):
+		app = App.get_running_app()
+		app.auth_service.sign_out()
+		app.change_screen("splash_screen", "backward")

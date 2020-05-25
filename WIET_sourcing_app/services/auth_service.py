@@ -117,7 +117,9 @@ class AuthService:
 		return True
 
 	def sign_out(self):
-		del self._client.headers["Authorization"]
+		self._store.delete(AUTH_TOKEN_KEY)
+		if self._client.headers['Authorization'] is not None:
+			del self._client.headers["Authorization"]
 
 	@property
 	def client(self) -> GraphQLClient:

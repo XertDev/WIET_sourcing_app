@@ -37,11 +37,25 @@
             id: central
             height: self.minimum_height
             orientation: "vertical"
+
             MDBoxLayout:
-                id: filter_area
                 size_hint: 1, 0.2
-                padding: "20dp", 0
-                MDTextFieldRound:
-                    pos_hint: {"center_y": 0.5}
-                    size_hint: None, None
-                    multiline: False
+                orientation: "horizontal"
+                MDBoxLayout:
+                    id: filter_area
+                    size_hint: 0.5, 0.2
+                    padding: "20dp", 0
+                    MDTextFieldRound:
+                        pos_hint: {"center_y": 0.5}
+                        size_hint: None, None
+                        multiline: False
+                MDBoxLayout:
+                    id: filter_area
+                    size_hint: 0.5, 0.2
+                    padding: "20dp", 0
+
+                    MDRectangleFlatButton:
+                        #pos_hint: {"center_y": 0.5, "left":0.9}
+                        pos_hint: {"center_y": 0.5,"right": 1}
+                        text: "Wyloguj się"
+                        on_release: root.sign_out()
