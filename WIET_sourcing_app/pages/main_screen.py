@@ -6,18 +6,26 @@ from kivy.app import App
 from kivy.uix.screenmanager import Screen
 from kivymd.uix.label import MDLabel
 
+from WIET_sourcing_app.data_providers.question_set_list_provider import QuestionSetListProvider
+
 from WIET_sourcing_app.widgets.data_table import data_table
+from WIET_sourcing_app.widgets.data_table.data_table import DataTable
 
 
 class MainScreen(Screen):
 	_task: Task
+	_table: DataTable
 
 	def on_pre_enter(self, *args):
 		self._task = asyncio.create_task(self.query_user_info())
 		#self._task = asyncio.create_task(self.query_question_sets())
+		self._table = DataTable(QuestionSetListProvider())
+		self.ids.central.add_widget(self._table)
 		super().on_pre_enter(*args)
 
+
 	def on_pre_leave(self, *args):
+		self.ids.central.remove_widget(self._table)
 		self._task.cancel()
 
 	def update_view(self):

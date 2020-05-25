@@ -1,4 +1,5 @@
 #Based on https://github.com/HeaTTheatR/KivyMD/blob/master/kivymd/uix/datatables.py
+import asyncio
 from typing import List, Dict
 
 import rx
@@ -82,12 +83,14 @@ class DataTableView(RecycleView):
 			self._paginator.page,
 			self._paginator.page_size,
 			lambda x, y: (x, y)
-		).subscribe(self.update_data)
+		).subscribe(lambda x: asyncio.create_task(self.update_data(x)))
 
-	def update_data(self, page_info):
+	async def update_data(self, page_info):
 		data = []
 		start_element = page_info[0] * page_info[1]
-		for i, row_data in enumerate(self._data_provider.get_page_rows(*page_info)):
+		self._paginator.set_item_count(await self._data_provider.get_row_count())
+		rows = await self._data_provider.get_page_rows(*page_info)
+		for i, row_data in enumerate(rows):
 			row_index = start_element + i
 			data.append(
 				{
@@ -116,18 +119,24 @@ class DataTable(BoxLayout):
 	paginator: DataTablePaginator
 	data_provider: AbstractDataProvider = DummyProvider()
 
-	def __init__(self, **kwargs):
+	def __init__(self, provider: AbstractDataProvider, **kwargs):
 		super(DataTable, self).__init__(**kwargs)
+		if provider:
+			self.data_provider = provider
+
 		self.register_event_type("on_row_press")
 		self.paginator = DataTablePaginator()
 		self._header = DataTableHeader(["No."] + self.data_provider.get_columns())
 		self._table_view = DataTableView(self.paginator, self.data_provider, self._header.column_minimum, self)
 		self._pagination = DataTablePagination(self.paginator)
-		self.paginator.set_item_count(self.data_provider.get_row_count())
+		asyncio.create_task(self._init_paginator())
 
 		self.add_widget(self._header)
 		self.add_widget(self._table_view)
 		self.add_widget(self._pagination)
+
+	async def _init_paginator(self):
+		self.paginator.set_item_count(await self.data_provider.get_row_count())
 
 	def on_row_press(self, *args):
 		"""Called when a table row is clicked."""
