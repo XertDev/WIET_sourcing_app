@@ -119,11 +119,12 @@ class DataTable(BoxLayout):
 	paginator: DataTablePaginator
 	data_provider: AbstractDataProvider = DummyProvider()
 
-	def __init__(self, provider: AbstractDataProvider, **kwargs):
+	def __init__(self, provider: AbstractDataProvider, callback, **kwargs):
 		super(DataTable, self).__init__(**kwargs)
 		if provider:
 			self.data_provider = provider
 
+		self.callback = callback
 		self.register_event_type("on_row_press")
 		self.paginator = DataTablePaginator()
 		self._header = DataTableHeader(["No."] + self.data_provider.get_columns())
@@ -140,5 +141,7 @@ class DataTable(BoxLayout):
 
 	def on_row_press(self, *args):
 		"""Called when a table row is clicked."""
+		print(args)
 		print(args[0].Index)
+		self.callback(args)
 

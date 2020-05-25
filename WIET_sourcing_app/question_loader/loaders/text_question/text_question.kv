@@ -1,0 +1,47 @@
+<TextQuestionScreen>:
+    MDCard:
+        size_hint: .8, .8
+        pos_hint: {"center_x": .5, "center_y": .5}
+        padding: "10dp"
+
+        ScrollView:
+            size_hint: 1, 0.6
+            pos_hint: {"top" : 1}
+
+            BoxLayout:
+                id: main_box_layout
+                orientation: "vertical"
+                size_hint_y: None
+                height: self.minimum_height
+                padding: dp(48)
+                spacing: 12
+
+                MDLabel:
+                    id: label_test
+
+                GridLayout:
+                    cols: 2
+                    id: user_input_layout
+                    orientation: "vertical"
+                    size_hint_y: None
+                    height: self.minimum_height
+                    spacing: 12
+
+
+                MDRectangleFlatButton:
+                    id: next_question_button
+                    text: "Następne pytanie"
+                    on_release: app.solve_set_mode.show_next_question()
+
+<AnswerTextFieldWidget@MDTextField>:
+    id: answer_textfield
+    hint_text: "Tutaj wpisz swoją odpowiedź"
+
+<SingleAnswerCheck@MDCheckbox>:
+    group: "answer_check_group"
+    size_hint: None, None
+    size: dp(48), dp(48)
+
+<MultipleAnswerCheck@MDCheckbox>:
+    size_hint: None, None
+    size: dp(48), dp(48)

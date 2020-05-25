@@ -4,6 +4,7 @@ from aiogqlc import GraphQLClient
 from kivy.storage import AbstractStore
 
 from WIET_sourcing_app.models.question_set_info import QuestionSetInfo
+from WIET_sourcing_app.models.question import QuestionInfo
 
 ALL_QUESTION_SETS = """
 query AllQuestionSets{
@@ -15,6 +16,7 @@ query AllQuestionSets{
 				details
 				closeDate
 				questionCount
+				id
 			}
 		}
 	}
@@ -26,6 +28,21 @@ query TotalQuestionCount{
 	allQuestionSets{
 		totalCount
 	}
+}"""
+QUERY_SET_QUESTIONS = """
+{
+	questionSet(id:"%s"){
+	    questions{
+      		edges{
+        		node{
+        		    id
+          			question{
+          			    __typename
+          			}
+          	    }    
+            }
+        }
+    }
 }"""
 
 
@@ -76,6 +93,30 @@ class QuestionSetService:
 				node["name"],
 				node["details"],
 				node["closeDate"],
-				node["questionCount"]
+				node["questionCount"],
 			))
 		return sets
+
+	async def get_set_questions(self, set_id) -> List[QuestionInfo]:
+		try:
+			result = await self._client.execute(QUERY_SET_QUESTIONS % set_id)
+		except ValueError:
+			print("Failed to query set questions")
+			return []
+
+		result = await result.json()
+
+		if "errors" in result:
+			print("Failed to query set questions")
+			return []
+
+		result = result["data"]["questionSet"]["questions"]
+		questions = []
+		for edge in result["edges"]:
+			node = edge["node"]
+			questions.append(QuestionInfo(
+				node["id"],
+				node["question"]["__typename"]
+			))
+		return questions
+
