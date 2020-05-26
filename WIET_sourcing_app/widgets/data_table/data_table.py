@@ -92,6 +92,7 @@ class DataTableView(RecycleView):
 		rows = await self._data_provider.get_page_rows(*page_info)
 		for i, row_data in enumerate(rows):
 			row_index = start_element + i
+
 			data.append(
 				{
 					"text": str(row_index),
@@ -110,6 +111,18 @@ class DataTableView(RecycleView):
 				)
 
 		self.data = data
+		self._data = data
+
+	def search(self, pattern, element=lambda x:x):
+		data = []
+		print(self.data)
+		for row in self._data:
+			if pattern is not None and element is not None:
+				if pattern in str(element(row)):
+					data.append(row)
+		self.data = data
+		print(self.data)
+		self.refresh_from_data()
 
 
 class DataTable(BoxLayout):
@@ -145,3 +158,5 @@ class DataTable(BoxLayout):
 		print(args[0].Index)
 		self.callback(args)
 
+	def search(self, pattern, element):
+		self._table_view.search(pattern, element)

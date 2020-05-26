@@ -51,3 +51,6 @@ class MainScreen(Screen):
 		app = App.get_running_app()
 		app.auth_service.sign_out()
 		app.change_screen("splash_screen", "backward")
+
+	def search_table(self):
+		self._table.search(self.ids.filter_textfield.text, lambda row: row['text'])

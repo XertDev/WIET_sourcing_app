@@ -46,9 +46,12 @@
                     size_hint: 0.5, 0.2
                     padding: "20dp", 0
                     MDTextFieldRound:
+                        id: filter_textfield
                         pos_hint: {"center_y": 0.5}
                         size_hint: None, None
                         multiline: False
+                        on_text_validate: root.search_table()
+
                 MDBoxLayout:
                     id: filter_area
                     size_hint: 0.5, 0.2
