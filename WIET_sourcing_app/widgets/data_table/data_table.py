@@ -78,6 +78,7 @@ class DataTableView(RecycleView):
 		self._cols_minimum = cols_minimum
 		self.viewclass = DataTableRow
 		self._parent = parent
+		self._query = ""
 
 		rx.Observable.combine_latest(
 			self._paginator.page,
@@ -85,11 +86,14 @@ class DataTableView(RecycleView):
 			lambda x, y: (x, y)
 		).subscribe(lambda x: asyncio.create_task(self.update_data(x)))
 
+	async def set_search_string(self, query):
+		self._query = query
+
 	async def update_data(self, page_info):
 		data = []
 		start_element = page_info[0] * page_info[1]
 		self._paginator.set_item_count(await self._data_provider.get_row_count())
-		rows = await self._data_provider.get_page_rows(*page_info)
+		rows = await self._data_provider.get_page_rows(*page_info, self._query)
 		for i, row_data in enumerate(rows):
 			row_index = start_element + i
 			data.append(
@@ -135,6 +139,10 @@ class DataTable(BoxLayout):
 		self.add_widget(self._header)
 		self.add_widget(self._table_view)
 		self.add_widget(self._pagination)
+
+	async def set_search_string(self, query):
+		await self._table_view.set_search_string(query)
+		self.paginator.set_page(0)
 
 	async def _init_paginator(self):
 		self.paginator.set_item_count(await self.data_provider.get_row_count())

@@ -7,8 +7,8 @@ from WIET_sourcing_app.models.question_set_info import QuestionSetInfo
 from WIET_sourcing_app.models.question import QuestionInfo
 
 ALL_QUESTION_SETS = """
-query AllQuestionSets{
-	allQuestionSets{
+query AllQuestionSets($name: String!){
+	allQuestionSets(filters: {nameLike: $name}){
 		edges{
 			node{
 				id
@@ -33,16 +33,16 @@ QUERY_SET_QUESTIONS = """
 {
 	questionSet(id:"%s"){
 	    questions{
-      		edges{
-        		node{
-        		    id
-          			question{
-          			    __typename
-          			}
-          	    }    
-            }
-        }
-    }
+			edges{
+				node{
+				    id
+					question{
+					    __typename
+					}
+			}    
+		}
+		}
+	}
 }"""
 
 
@@ -71,9 +71,9 @@ class QuestionSetService:
 
 		return result["totalCount"]
 
-	async def query_question_sets(self) -> List[QuestionSetInfo]:
+	async def query_question_sets(self, query: str) -> List[QuestionSetInfo]:
 		try:
-			result = await self._client.execute(ALL_QUESTION_SETS)
+			result = await self._client.execute(ALL_QUESTION_SETS, {"name": query+"%"})
 		except ValueError:
 			print("Failed to query question sets")
 			return []
